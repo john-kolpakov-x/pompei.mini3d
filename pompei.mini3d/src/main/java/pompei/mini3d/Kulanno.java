@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 public class Kulanno {
   
   public static void main(String[] args) throws Exception {
-    int width = 800;
+    int width = 1200;
     int height = 600;
     
     BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
@@ -43,12 +43,38 @@ public class Kulanno {
       }
     }
     
+    long startedAt = System.currentTimeMillis();
+    
+    {
+      TreeDraw td = new TreeDraw();
+      td.screen = rgbArray;
+      td.width = width;
+      td.height = height;
+      td.scansize = scansize;
+      
+      td.x1 = 0.25;
+      td.y1 = 0.625;
+      td.z1 = 0.1;
+      
+      td.x2 = 0.75;
+      td.y2 = 0.125;
+      td.z2 = 0.1;
+      
+      td.x3 = 0.875;
+      td.y3 = 0.75;
+      td.z3 = 0.1;
+      
+      td.color = rgbToInt(0, 255, 0);
+      
+      td.draw();
+    }
+    
     {
       bi.setRGB(0, 0, width, height, rgbArray, 0, scansize);
       
       ImageIO.write(bi, "png", new File("build/kulanno.png"));
       
-      System.out.println("Hi");
+      System.out.println("OK for " + (System.currentTimeMillis() - startedAt));
     }
   }
   
