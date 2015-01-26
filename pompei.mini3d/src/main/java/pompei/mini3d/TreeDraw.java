@@ -2,10 +2,7 @@ package pompei.mini3d;
 
 import static java.lang.Math.ceil;
 
-public class TreeDraw {
-  
-  public int width, height, scansize;
-  public int[] screen;
+public final class TreeDraw {
   
   public double x1, y1, z1;
   public double x2, y2, z2;
@@ -13,7 +10,13 @@ public class TreeDraw {
   
   public int color;
   
-  public void draw() {
+  private PointBuffer pointBuffer;
+  
+  public TreeDraw(PointBuffer pointBuffer) {
+    this.pointBuffer = pointBuffer;
+  }
+  
+  public final void draw() {
     {
       double tmp;
       if (x1 > x2) {
@@ -68,13 +71,35 @@ public class TreeDraw {
     
     drawTra(x1, x2, y1, y2, y1, y4, z1, z2, z1, z4);
     drawTra(x2, x3, y2, y3, y4, y3, z2, z3, z4, z3);
+    
   }
   
-  private void drawTra(double xA, double xB, double yA1, double yB1, double yA2, double yB2,
+  private final static double DEEP_SIZE = 2 * (double)Integer.MAX_VALUE - 1;
+  
+  private final void drawTra(double xA, double xB, double yA1, double yB1, double yA2, double yB2,
       double zA1, double zB1, double zA2, double zB2) {
-    double xi = ceil(xA * width) / width;
-    double xStep = 1.0 / width;
-    double yStep = 1.0 / height;
+    
+    if (yB1 > yB2 || yA1 > yA2) {
+      double tmp = yB1;
+      yB1 = yB2;
+      yB2 = tmp;
+      
+      tmp = zB1;
+      zB1 = zB2;
+      zB2 = tmp;
+      
+      tmp = yA1;
+      yA1 = yA2;
+      yA2 = tmp;
+      
+      tmp = zA1;
+      zA1 = zA2;
+      zA2 = tmp;
+    }
+    
+    double xi = ceil(xA * pointBuffer.width) / pointBuffer.width;
+    double xStep = 1.0 / pointBuffer.width;
+    double yStep = 1.0 / pointBuffer.height;
     
     double deltaX = xB - xA;
     double Ky1 = (yB1 - yA1) / deltaX;
@@ -82,42 +107,61 @@ public class TreeDraw {
     double Kz1 = (zB1 - zA1) / deltaX;
     double Kz2 = (zB2 - zA2) / deltaX;
     
-    int scansize = this.scansize;
-    int[] screen = this.screen;
+    int scansize = this.pointBuffer.scansize;
+    int[] screen = this.pointBuffer.screen;
     int color = this.color;
     
-    while (xi < xB) {
+    double zBack = pointBuffer.zBack;
+    double zFace = pointBuffer.zFace;
+    Object[] syncBuffer = pointBuffer.syncBuffer;
+    int[] buffer = pointBuffer.buffer;
+    
+    double DEEP_K = DEEP_SIZE / (zBack - zFace);
+    
+    for (; xi < xB; xi += xStep) {
       
       double startX = xi - xA;
       
       double yFROM = yA1 + Ky1 * startX;
-      double yEND = yA2 + Ky2 * startX;
+      double yEND = yA2 + Ky2 * startX + 0.1 * yStep;
       
       double z1 = zA1 + Kz1 * startX;
       double z2 = zA2 + Kz2 * startX;
       
-      double yi = ceil(yFROM * height) / height;
+      double yi = ceil(yFROM * pointBuffer.height) / pointBuffer.height;
       
       double Kzy = (z2 - z1) / (yEND - yFROM);
       
-      while (yi < yEND) {
+      IN: for (; yi < yEND; yi += yStep) {
         
-        int X = (int)(xi * width + 0.1);
-        int Y = (int)(yi * height + 0.1);
+        if (xi < 0) continue IN;
+        if (xi > 1) continue IN;
+        if (yi < 0) continue IN;
+        if (yi > 1) continue IN;
         
-        @SuppressWarnings("unused")
+        int X = (int)(xi * pointBuffer.width + 0.2);
+        int Y = (int)(yi * pointBuffer.height + 0.2);
+        
         double zi = z1 + (yi - yFROM) * Kzy;
+        
+        if (zi < zFace) continue IN;
+        if (zi > zBack) continue IN;
+        
+        int deep = (int)((zi - zFace) * DEEP_K + 0.5);
         
         //point {xi, yi, zi}
         
         int pos = X + Y * scansize;
         
+        synchronized (syncBuffer[pos]) {
+          if (buffer[pos] < deep) continue IN;
+          buffer[pos] = deep;
+        }
+        
         screen[pos] = color;
         
-        yi += yStep;
       }
       
-      xi += xStep;
     }
   }
 }
