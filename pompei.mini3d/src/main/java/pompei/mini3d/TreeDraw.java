@@ -157,9 +157,9 @@ public final class TreeDraw {
         synchronized (syncBuffer[pos]) {
           if (buffer[pos] < deep) continue IN;
           buffer[pos] = deep;
+          
+          screen[pos] = color;
         }
-        
-        screen[pos] = color;
         
       }
       
