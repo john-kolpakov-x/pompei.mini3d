@@ -1,5 +1,7 @@
 package pompei.mini3d;
 
+import static pompei.mini3d.ColorUtil.rgbToInt;
+
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -115,13 +117,5 @@ public class ProbeDeepBuffer {
       
       System.out.println("Complete " + fname);
     }
-  }
-  
-  private static int rgbToInt(int r, int g, int b) {
-    return 0 //
-        | ((r & 0xFF) << (2 * 8)) //
-        | ((g & 0xFF) << (1 * 8)) //
-        | ((b & 0xFF) << (0 * 8)) //
-        | ((0xFF) << (3 * 8));
   }
 }
