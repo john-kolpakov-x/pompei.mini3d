@@ -118,7 +118,10 @@ public final class TreeDraw {
     
     double DEEP_K = DEEP_SIZE / (zBack - zFace);
     
-    for (; xi < xB; xi += xStep) {
+    OUT: for (; xi < xB; xi += xStep) {
+      
+      if (xi < 0) continue OUT;
+      if (xi > 1) continue OUT;
       
       double startX = xi - xA;
       
@@ -134,8 +137,6 @@ public final class TreeDraw {
       
       IN: for (; yi < yEND; yi += yStep) {
         
-        if (xi < 0) continue IN;
-        if (xi > 1) continue IN;
         if (yi < 0) continue IN;
         if (yi > 1) continue IN;
         
