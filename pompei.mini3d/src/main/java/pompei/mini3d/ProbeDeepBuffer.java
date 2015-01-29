@@ -2,12 +2,28 @@ package pompei.mini3d;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class Kulanno {
+public class ProbeDeepBuffer {
   
   public static void main(String[] args) throws Exception {
+    createFile(0);
+    createFile(1);
+    createFile(2);
+    createFile(3);
+    createFile(4);
+    createFile(5);
+    createFile(6);
+    createFile(7);
+    createFile(8);
+    createFile(9);
+    
+    System.out.println("OK");
+  }
+  
+  private static void createFile(int U) throws IOException {
     int width = 1200;
     int height = 600;
     
@@ -51,69 +67,53 @@ public class Kulanno {
     
     pointBuffer.initDeepBuffer(0, +1);
     
-    Thread[] threads = new Thread[8];
-    for (int i = 0, C = threads.length; i < C; i++) {
-      threads[i] = new Thread(new Runnable() {
-        @Override
-        public void run() {
-          TreeDraw td = new TreeDraw(pointBuffer);
-          
-          for (int k = 0; k < 1000; k++) {
-            td.x1 = 0.25;
-            td.y1 = 0.625;
-            td.z1 = 0.1;
-            
-            td.x2 = 0.75;
-            td.y2 = 0.125;
-            td.z2 = 0.1;
-            
-            td.x3 = 0.875;
-            td.y3 = 0.75;
-            td.z3 = 0.1;
-            
-            td.color = rgbToInt(0, 255, 0);
-            
-            td.draw();
-            
-            td.x1 = 0.25;
-            td.y1 = 0.625;
-            td.z1 = 0.1;
-            
-            td.x2 = 0.5;
-            td.y2 = 1;
-            td.z2 = 0.1;
-            
-            td.x3 = 0.875;
-            td.y3 = 0.75;
-            td.z3 = 0.1;
-            
-            td.color = rgbToInt(0, 200, 0);
-            
-            td.draw();
-          }
-        }
-      });
-    }
+    TreeDraw td = new TreeDraw(pointBuffer);
     
-    long startedAt = System.currentTimeMillis();
-    
-    for (Thread t : threads) {
-      t.start();
-      System.out.println("Started " + t);
+    for (int k = 0; k < 1; k++) {
+      td.x1 = 0.125;
+      td.y1 = 0.625;
+      td.z1 = 0.9;
+      
+      td.x2 = 0.75;
+      td.y2 = 0.125;
+      td.z2 = 0.1;
+      
+      td.x3 = 0.875;
+      td.y3 = 0.75;
+      td.z3 = 0.1;
+      
+      td.color = rgbToInt(0, 255, 0);
+      
+      td.draw();
+      
+      td.x1 = 0.125;
+      td.y1 = 0.875 - U * 0.125 / 2.0;
+      td.z1 = 0.1;
+      
+      td.x2 = 0.375;
+      td.y2 = 0.125;
+      td.z2 = 0.9;
+      
+      td.x3 = 0.875;
+      td.y3 = 0.375;
+      td.z3 = 0.7;
+      
+      td.color = rgbToInt(200, 0, 0);
+      
+      td.draw();
     }
-    for (Thread t : threads) {
-      t.join();
-      System.out.println("Finished " + t);
-    }
-    
-    long time = System.currentTimeMillis() - startedAt;
     
     {
       bi.setRGB(0, 0, width, height, rgbArray, 0, scansize);
       
-      ImageIO.write(bi, "png", new File("build/kulanno.png"));
+      String S = "" + U;
+      while (S.length() < 2) {
+        S = "0" + S;
+      }
+      String fname = "build/Probe05-" + S + ".png";
+      ImageIO.write(bi, "png", new File(fname));
       
-      System.out.println("OK for " + time);
+      System.out.println("Complete " + fname);
     }
   }
   

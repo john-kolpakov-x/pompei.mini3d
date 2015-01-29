@@ -147,7 +147,7 @@ public final class TreeDraw {
         if (zi < zFace) continue IN;
         if (zi > zBack) continue IN;
         
-        int deep = (int)((zi - zFace) * DEEP_K + 0.5);
+        int deep = (int)((double)Integer.MIN_VALUE + (zi - zFace) * DEEP_K + 0.5);
         
         //point {xi, yi, zi}
         
