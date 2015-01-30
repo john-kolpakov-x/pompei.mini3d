@@ -5,6 +5,7 @@ public class GenTriLauncher {
     GenTri gen = new GenTri();
     
     gen.src = "src/main/java";
+    gen.normals = true;
     
     gen.run();
     
