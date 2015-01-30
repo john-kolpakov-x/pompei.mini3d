@@ -7,6 +7,7 @@ public class GenTri {
   
   public String src;
   public boolean normals = false;
+  public boolean localising = true;
   
   private PrintStream out;
   
@@ -32,6 +33,7 @@ public class GenTri {
     out.println("package pompei.mini3d.tri;");
     out.println();
     out.println("import static java.lang.Math.ceil;");
+    out.println("import static java.lang.Math.sqrt;");
     out.println("import pompei.mini3d.PointBuffer;");
     out.println();
     out.println("public final class " + className + " {");
@@ -137,7 +139,11 @@ public class GenTri {
       out.print(") {");
       out.println();
     }
-    if (normals) {
+    if (normals && localising) {
+      out.println("    ");
+      out.println("    double x1=this.x1, y1=this.y1, z1=this.z1;");
+      out.println("    double x2=this.x2, y2=this.y2, z2=this.z2;");
+      out.println("    double x3=this.x3, y3=this.y3, z3=this.z3;");
       out.println("    ");
       out.println("    double nx1=this.nx1, ny1=this.ny1, nz1=this.nz1;");
       out.println("    double nx2=this.nx2, ny2=this.ny2, nz2=this.nz2;");
@@ -184,12 +190,12 @@ public class GenTri {
     out.println("      double yFROM = yA1 + Ky1 * startX;");
     out.println("      double yEND = yA2 + Ky2 * startX + 0.1 * yStep;");
     out.println("      ");
-    out.println("      double z1 = zA1 + Kz1 * startX;");
-    out.println("      double z2 = zA2 + Kz2 * startX;");
+    out.println("      double zi1 = zA1 + Kz1 * startX;");
+    out.println("      double zi2 = zA2 + Kz2 * startX;");
     out.println("      ");
     out.println("      double yi = ceil(yFROM * pointBuffer.height) / pointBuffer.height;");
     out.println("      ");
-    out.println("      double Kzy = (z2 - z1) / (yEND - yFROM);");
+    out.println("      double Kzy = (zi2 - zi1) / (yEND - yFROM);");
     out.println("      ");
     out.println("      IN: for (; yi < yEND; yi += yStep) {");
     out.println("        ");
@@ -199,7 +205,7 @@ public class GenTri {
     out.println("        int X = (int)(xi * pointBuffer.width + 0.2);");
     out.println("        int Y = (int)(yi * pointBuffer.height + 0.2);");
     out.println("        ");
-    out.println("        double zi = z1 + (yi - yFROM) * Kzy;");
+    out.println("        double zi = zi1 + (yi - yFROM) * Kzy;");
     out.println("        ");
     out.println("        if (zi < zFace) continue IN;");
     out.println("        if (zi > zBack) continue IN;");
@@ -207,6 +213,28 @@ public class GenTri {
     out.println("        int deep = (int)((double)Integer.MIN_VALUE + (zi - zFace) * DEEP_K + 0.5);");
     out.println("        ");
     out.println("        //point {xi, yi, zi}");
+    if (normals) {
+      out.println("        ");
+      out.println("        double D1=(xi-x1)*(xi-x1)+(yi-y1)*(yi-y1)+(zi-z1)*(zi-z1);");
+      out.println("        double D2=(xi-x2)*(xi-x2)+(yi-y2)*(yi-y2)+(zi-z2)*(zi-z2);");
+      out.println("        double D3=(xi-x3)*(xi-x3)+(yi-y3)*(yi-y3)+(zi-z3)*(zi-z3);");
+      out.println("        ");
+      out.println("        double KD1=D2*D3;");
+      out.println("        double KD2=D3*D1;");
+      out.println("        double KD3=D1*D2;");
+      out.println("        ");
+      out.println("        double Nx = KD1*nx1 + KD2*nx2 + KD3*nx3;");
+      out.println("        double Ny = KD1*ny1 + KD2*ny2 + KD3*ny3;");
+      out.println("        double Nz = KD1*nz1 + KD2*nz2 + KD3*nz3;");
+      out.println("        ");
+      out.println("        double Nlen=sqrt(Nx*Nx + Ny*Ny + Nz*Nz);");
+      out.println("        ");
+      out.println("        double nx = Nx/Nlen;");
+      out.println("        double ny = Ny/Nlen;");
+      out.println("        double nz = Nz/Nlen;");
+      out.println("        ");
+      out.println("        //normal {nx, ny, nz}");
+    }
     out.println("        ");
     out.println("        int pos = X + Y * scansize;");
     out.println("        ");
