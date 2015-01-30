@@ -3,7 +3,7 @@ package pompei.mini3d.tri;
 import static java.lang.Math.ceil;
 import pompei.mini3d.PointBuffer;
 
-public final class TreeDraw {
+public final class TriDraw {
   
   public double x1, y1, z1;
   public double x2, y2, z2;
@@ -13,9 +13,11 @@ public final class TreeDraw {
   
   private PointBuffer pointBuffer;
   
-  public TreeDraw(PointBuffer pointBuffer) {
+  public TriDraw(PointBuffer pointBuffer) {
     this.pointBuffer = pointBuffer;
   }
+  
+  private final static double DEEP_SIZE = 2 * (double)Integer.MAX_VALUE - 1;
   
   public final void draw() {
     {
@@ -24,11 +26,9 @@ public final class TreeDraw {
         tmp = x1;
         x1 = x2;
         x2 = tmp;
-        
         tmp = y1;
         y1 = y2;
         y2 = tmp;
-        
         tmp = z1;
         z1 = z2;
         z2 = tmp;
@@ -40,11 +40,9 @@ public final class TreeDraw {
         tmp = x2;
         x2 = x3;
         x3 = tmp;
-        
         tmp = y2;
         y2 = y3;
         y3 = tmp;
-        
         tmp = z2;
         z2 = z3;
         z3 = tmp;
@@ -53,11 +51,9 @@ public final class TreeDraw {
         tmp = x1;
         x1 = x2;
         x2 = tmp;
-        
         tmp = y1;
         y1 = y2;
         y2 = tmp;
-        
         tmp = z1;
         z1 = z2;
         z2 = tmp;
@@ -75,24 +71,21 @@ public final class TreeDraw {
     
   }
   
-  private final static double DEEP_SIZE = 2 * (double)Integer.MAX_VALUE - 1;
-  
   private final void drawTra(double xA, double xB, double yA1, double yB1, double yA2, double yB2,
       double zA1, double zB1, double zA2, double zB2) {
     
     if (yB1 > yB2 || yA1 > yA2) {
-      double tmp = yB1;
+      double tmp;
+      
+      tmp = yB1;
       yB1 = yB2;
       yB2 = tmp;
-      
       tmp = zB1;
       zB1 = zB2;
       zB2 = tmp;
-      
       tmp = yA1;
       yA1 = yA2;
       yA2 = tmp;
-      
       tmp = zA1;
       zA1 = zA2;
       zA2 = tmp;
@@ -129,12 +122,12 @@ public final class TreeDraw {
       double yFROM = yA1 + Ky1 * startX;
       double yEND = yA2 + Ky2 * startX + 0.1 * yStep;
       
-      double z1 = zA1 + Kz1 * startX;
-      double z2 = zA2 + Kz2 * startX;
+      double zi1 = zA1 + Kz1 * startX;
+      double zi2 = zA2 + Kz2 * startX;
       
       double yi = ceil(yFROM * pointBuffer.height) / pointBuffer.height;
       
-      double Kzy = (z2 - z1) / (yEND - yFROM);
+      double Kzy = (zi2 - zi1) / (yEND - yFROM);
       
       IN: for (; yi < yEND; yi += yStep) {
         
@@ -144,7 +137,7 @@ public final class TreeDraw {
         int X = (int)(xi * pointBuffer.width + 0.2);
         int Y = (int)(yi * pointBuffer.height + 0.2);
         
-        double zi = z1 + (yi - yFROM) * Kzy;
+        double zi = zi1 + (yi - yFROM) * Kzy;
         
         if (zi < zFace) continue IN;
         if (zi > zBack) continue IN;

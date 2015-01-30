@@ -9,7 +9,7 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-import pompei.mini3d.tri.TreeDraw;
+import pompei.mini3d.tri.TriDraw;
 
 public class DrawAfricanHead {
   public static void main(String[] args) throws Exception {
@@ -35,7 +35,7 @@ public class DrawAfricanHead {
     
     pointBuffer.initDeepBuffer(0, +1);
     
-    TreeDraw td = new TreeDraw(pointBuffer);
+    TriDraw td = new TriDraw(pointBuffer);
     
     Random rnd = new SecureRandom();
     

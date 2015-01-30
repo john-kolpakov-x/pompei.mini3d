@@ -5,7 +5,7 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import pompei.mini3d.tri.TreeDraw;
+import pompei.mini3d.tri.TriDraw;
 
 public class ProbeManyTriesInManyThreads {
   
@@ -58,7 +58,7 @@ public class ProbeManyTriesInManyThreads {
       threads[i] = new Thread(new Runnable() {
         @Override
         public void run() {
-          TreeDraw td = new TreeDraw(pointBuffer);
+          TriDraw td = new TriDraw(pointBuffer);
           
           for (int k = 0; k < 1000; k++) {
             td.x1 = 0.25;

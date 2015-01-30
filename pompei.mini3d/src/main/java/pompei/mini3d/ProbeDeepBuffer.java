@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import pompei.mini3d.tri.TreeDraw;
+import pompei.mini3d.tri.TriDraw;
 
 public class ProbeDeepBuffer {
   
@@ -71,7 +71,7 @@ public class ProbeDeepBuffer {
     
     pointBuffer.initDeepBuffer(0, +1);
     
-    TreeDraw td = new TreeDraw(pointBuffer);
+    TriDraw td = new TriDraw(pointBuffer);
     
     for (int k = 0; k < 1; k++) {
       td.x1 = 0.125;
