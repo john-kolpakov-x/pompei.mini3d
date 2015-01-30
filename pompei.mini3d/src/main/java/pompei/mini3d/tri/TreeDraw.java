@@ -1,6 +1,7 @@
-package pompei.mini3d;
+package pompei.mini3d.tri;
 
 import static java.lang.Math.ceil;
+import pompei.mini3d.PointBuffer;
 
 public final class TreeDraw {
   

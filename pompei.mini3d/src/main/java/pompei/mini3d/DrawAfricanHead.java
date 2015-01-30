@@ -9,6 +9,8 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import pompei.mini3d.tri.TreeDraw;
+
 public class DrawAfricanHead {
   public static void main(String[] args) throws Exception {
     Model3D m = new Model3D();

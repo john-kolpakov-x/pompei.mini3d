@@ -8,6 +8,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import pompei.mini3d.tri.TreeDraw;
+
 public class ProbeDeepBuffer {
   
   public static void main(String[] args) throws Exception {

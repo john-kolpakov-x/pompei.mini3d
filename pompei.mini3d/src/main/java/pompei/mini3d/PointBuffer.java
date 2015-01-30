@@ -4,9 +4,9 @@ public final class PointBuffer {
   public int width, height, scansize;
   public int[] screen;
   
-  int zFace, zBack;
-  int[] buffer;
-  Object[] syncBuffer;
+  public int zFace, zBack;
+  public int[] buffer;
+  public Object[] syncBuffer;
   
   public void initDeepBuffer(int zFace, int zBack) {
     this.zFace = zFace;

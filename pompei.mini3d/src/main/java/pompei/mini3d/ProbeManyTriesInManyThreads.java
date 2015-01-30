@@ -5,6 +5,8 @@ import java.io.File;
 
 import javax.imageio.ImageIO;
 
+import pompei.mini3d.tri.TreeDraw;
+
 public class ProbeManyTriesInManyThreads {
   
   public static void main(String[] args) throws Exception {
