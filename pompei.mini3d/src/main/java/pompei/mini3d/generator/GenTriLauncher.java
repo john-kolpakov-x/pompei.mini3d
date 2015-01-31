@@ -5,10 +5,11 @@ public class GenTriLauncher {
     GenTri gen = new GenTri();
     
     gen.src = "src/main/java";
-    gen.normals = false;
+    gen.normals = true;
+    gen.textureUV = true;
     
     gen.packageName = "pompei.mini3d.tri";
-    gen.className = "TreeDraw";
+    gen.className = "ProbeTriDraw";
     
     gen.run();
     

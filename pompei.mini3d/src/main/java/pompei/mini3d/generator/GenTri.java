@@ -219,6 +219,20 @@ public class GenTri {
     methodDrawTri.prn("    Object[] syncBuffer = pointBuffer.syncBuffer;");
     methodDrawTri.prn("    int[] buffer = pointBuffer.buffer;");
     methodDrawTri.prn("    ");
+    if (normals || textureUV) {
+      imp.add("static java.lang.Math.sqrt");
+      methodDrawTri.prn("    double Co = " //
+          + "((x2-x1)*(x3-x1) + (y2-y1)*(y3-y1) + (z2-z1)*(z3-z1))" //
+          + "/" //
+          + "sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1))"//
+          + "/" //
+          + "sqrt((x3-x1)*(x3-x1) + (y3-y1)*(y3-y1) + (z3-z1)*(z3-z1));"//
+      );
+      methodDrawTri.prn("    double Si2 = 1-Co*Co;");
+      methodDrawTri.prn("    double V12_2 = (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1);");
+      methodDrawTri.prn("    double V13_2 = (x3-x1)*(x3-x1) + (y3-y1)*(y3-y1) + (z3-z1)*(z3-z1);");
+      methodDrawTri.prn("    ");
+    }
     methodDrawTri.prn("    double DEEP_K = DEEP_SIZE / (zBack - zFace);");
     methodDrawTri.prn("    ");
     methodDrawTri.prn("    OUT: for (; xi < xB; xi += xStep) {");
@@ -259,17 +273,17 @@ public class GenTri {
     methodDrawTri.prn("        //point {xi, yi, zi}");
     if (normals) {
       methodDrawTri.prn("        ");
-      methodDrawTri.prn("        double D1=(xi-x1)*(xi-x1)+(yi-y1)*(yi-y1)+(zi-z1)*(zi-z1);");
-      methodDrawTri.prn("        double D2=(xi-x2)*(xi-x2)+(yi-y2)*(yi-y2)+(zi-z2)*(zi-z2);");
-      methodDrawTri.prn("        double D3=(xi-x3)*(xi-x3)+(yi-y3)*(yi-y3)+(zi-z3)*(zi-z3);");
+      methodDrawTri.prn("        double A12 = " //
+          + "((xi-x1)*(x2-x1) + (yi-y1)*(y2-y1) + (zi-z1)*(z2-z1))/V12_2;");
+      methodDrawTri.prn("        double A13 = "
+          + "((xi-x1)*(x3-x1) + (yi-y1)*(y3-y1) + (zi-z1)*(z3-z1))/V13_2;");
       methodDrawTri.prn("        ");
-      methodDrawTri.prn("        double KD1=D2*D3;");
-      methodDrawTri.prn("        double KD2=D3*D1;");
-      methodDrawTri.prn("        double KD3=D1*D2;");
+      methodDrawTri.prn("        double a12 = (A12 - A13*Co)/Si2;");
+      methodDrawTri.prn("        double a13 = (A13 - A12*Co)/Si2;");
       methodDrawTri.prn("        ");
-      methodDrawTri.prn("        double Nx = KD1*nx1 + KD2*nx2 + KD3*nx3;");
-      methodDrawTri.prn("        double Ny = KD1*ny1 + KD2*ny2 + KD3*ny3;");
-      methodDrawTri.prn("        double Nz = KD1*nz1 + KD2*nz2 + KD3*nz3;");
+      methodDrawTri.prn("        double Nx = nx1 + (nx2-nx1)*a12 + (nx3-nx1)*a13;");
+      methodDrawTri.prn("        double Ny = ny1 + (ny2-ny1)*a12 + (ny3-ny1)*a13;");
+      methodDrawTri.prn("        double Nz = nz1 + (nz2-nz1)*a12 + (nz3-nz1)*a13;");
       methodDrawTri.prn("        ");
       imp.add("static java.lang.Math.sqrt");
       methodDrawTri.prn("        double Nlen=sqrt(Nx*Nx + Ny*Ny + Nz*Nz);");
@@ -279,6 +293,13 @@ public class GenTri {
       methodDrawTri.prn("        double nz = Nz/Nlen;");
       methodDrawTri.prn("        ");
       methodDrawTri.prn("        //normal {nx, ny, nz}");
+    }
+    if (textureUV) {
+      methodDrawTri.prn("        ");
+      methodDrawTri.prn("        double u = u1 + (u2-u1)*a12 + (u3-u1)*a13;");
+      methodDrawTri.prn("        double v = v1 + (v2-v1)*a12 + (v3-v1)*a13;");
+      methodDrawTri.prn("        ");
+      methodDrawTri.prn("        //texture {u, v}");
     }
     methodDrawTri.prn("        ");
     methodDrawTri.prn("        int pos = X + Y * scansize;");
