@@ -18,9 +18,10 @@ public class DrawAfricanHead {
     m.loadFromUrl(DrawAfricanHead.class.getResource("african_head.obj"));
     
     {
-      Mat4 u = new Mat4().fromThem();
+      Mat4 u = new Mat4().setPngMatrix();
+      double v[] = m.vertices;
       for (int i = 0, C = m.verticesCount; i < C; i++) {
-        u.mul3(m.vertices, 3 * i, m.vertices, 3 * i);
+        u.mul3(v, 3 * i, v, 3 * i);
       }
     }
     

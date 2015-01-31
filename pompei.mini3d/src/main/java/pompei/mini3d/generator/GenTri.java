@@ -179,6 +179,10 @@ public class GenTri {
       methodDrawTri.pr(") {");
       methodDrawTri.prn();
     }
+    methodDrawTri.prn("    ");
+    methodDrawTri.prn("    int width = pointBuffer.width;");
+    methodDrawTri.prn("    int height = pointBuffer.height;");
+    methodDrawTri.prn("    ");
     if (localising && (normals || textureUV)) {
       methodDrawTri.prn("    ");
       methodDrawTri.prn("    double x1=this.x1, y1=this.y1, z1=this.z1;");
@@ -208,9 +212,9 @@ public class GenTri {
     methodDrawTri.prn("    }");
     methodDrawTri.prn("    ");
     imp.add("static java.lang.Math.ceil");
-    methodDrawTri.prn("    double xi = ceil(xA * pointBuffer.width) / pointBuffer.width;");
-    methodDrawTri.prn("    double xStep = 1.0 / pointBuffer.width;");
-    methodDrawTri.prn("    double yStep = 1.0 / pointBuffer.height;");
+    methodDrawTri.prn("    double xi = ceil(xA * width) / width;");
+    methodDrawTri.prn("    double xStep = 1.0 / width;");
+    methodDrawTri.prn("    double yStep = 1.0 / height;");
     methodDrawTri.prn("    ");
     methodDrawTri.prn("    double deltaX = xB - xA;");
     methodDrawTri.prn("    double Ky1 = (yB1 - yA1) / deltaX;");
@@ -257,8 +261,7 @@ public class GenTri {
     methodDrawTri.prn("      double zi2 = zA2 + Kz2 * startX;");
     methodDrawTri.prn("      ");
     imp.add("static java.lang.Math.ceil");
-    methodDrawTri.prn("      double yi = ceil(yFROM * pointBuffer.height)"
-        + " / pointBuffer.height;");
+    methodDrawTri.prn("      double yi = ceil(yFROM * height) / height;");
     methodDrawTri.prn("      ");
     methodDrawTri.prn("      double Kzy = (zi2 - zi1) / (yEND - yFROM);");
     methodDrawTri.prn("      ");
@@ -267,8 +270,11 @@ public class GenTri {
     methodDrawTri.prn("        if (yi < 0) continue IN;");
     methodDrawTri.prn("        if (yi > 1) continue IN;");
     methodDrawTri.prn("        ");
-    methodDrawTri.prn("        int X = (int)(xi * pointBuffer.width + 0.2);");
-    methodDrawTri.prn("        int Y = (int)(yi * pointBuffer.height + 0.2);");
+    methodDrawTri.prn("        int X = (int)(xi * width + 0.2);");
+    methodDrawTri.prn("        int Y = (int)(yi * height + 0.2);");
+    methodDrawTri.prn("        ");
+    methodDrawTri.prn("        if (X >= width) continue IN;");
+    methodDrawTri.prn("        if (Y >= height) continue IN;");
     methodDrawTri.prn("        ");
     methodDrawTri.prn("        double zi = zi1 + (yi - yFROM) * Kzy;");
     methodDrawTri.prn("        ");
