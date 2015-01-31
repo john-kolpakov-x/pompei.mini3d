@@ -9,12 +9,20 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import pompei.mini3d.mat.Mat4;
 import pompei.mini3d.tri.TriDraw;
 
 public class DrawAfricanHead {
   public static void main(String[] args) throws Exception {
     Model3D m = new Model3D();
     m.loadFromUrl(DrawAfricanHead.class.getResource("african_head.obj"));
+    
+    {
+      Mat4 u = new Mat4().fromThem();
+      for (int i = 0, C = m.verticesCount; i < C; i++) {
+        u.mul3(m.vertices, 3 * i, m.vertices, 3 * i);
+      }
+    }
     
     int width = 600;
     int height = 600;
