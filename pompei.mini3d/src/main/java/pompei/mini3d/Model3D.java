@@ -1,5 +1,7 @@
 package pompei.mini3d;
 
+import static java.lang.System.arraycopy;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -10,6 +12,20 @@ public class Model3D {
   
   public double[] vertices;
   public int[] faces;
+  
+  public Model3D copy() {
+    Model3D ret = new Model3D();
+    ret.verticesCount = verticesCount;
+    ret.faceCount = faceCount;
+    
+    ret.vertices = new double[vertices.length];
+    arraycopy(vertices, 0, ret.vertices, 0, vertices.length);
+    
+    ret.faces = new int[faces.length];
+    arraycopy(faces, 0, ret.faces, 0, faces.length);
+    
+    return ret;
+  }
   
   public void loadFromUrl(URL resourceUrl) throws Exception {
     int vCount = 0, fCount = 0;

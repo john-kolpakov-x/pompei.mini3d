@@ -12,7 +12,7 @@ public class Mat4Test {
   
   @Test
   public void fromThem_001() throws Exception {
-    Mat4 m = new Mat4().fromThem();
+    Mat4 m = new Mat4().setPngMatrix();
     
     double v[] = new double[] { 0, 0, 0, 0 };
     m.mul3(v, 0, v, 0);
@@ -22,7 +22,7 @@ public class Mat4Test {
   
   @Test
   public void fromThem_002() throws Exception {
-    Mat4 m = new Mat4().fromThem();
+    Mat4 m = new Mat4().setPngMatrix();
     
     double v[] = new double[] { 1, 0, 0, 0 };
     m.mul3(v, 0, v, 0);
@@ -32,7 +32,7 @@ public class Mat4Test {
   
   @Test
   public void fromThem_003() throws Exception {
-    Mat4 m = new Mat4().fromThem();
+    Mat4 m = new Mat4().setPngMatrix();
     
     double v[] = new double[] { -1, 0, 0, 0 };
     m.mul3(v, 0, v, 0);
@@ -42,7 +42,7 @@ public class Mat4Test {
   
   @Test
   public void fromThem_004() throws Exception {
-    Mat4 m = new Mat4().fromThem();
+    Mat4 m = new Mat4().setPngMatrix();
     
     double v[] = new double[] { 0, 1, 0, 0 };
     m.mul3(v, 0, v, 0);
@@ -52,7 +52,7 @@ public class Mat4Test {
   
   @Test
   public void fromThem_005() throws Exception {
-    Mat4 m = new Mat4().fromThem();
+    Mat4 m = new Mat4().setPngMatrix();
     
     double v[] = new double[] { 0, -1, 0, 0 };
     m.mul3(v, 0, v, 0);
