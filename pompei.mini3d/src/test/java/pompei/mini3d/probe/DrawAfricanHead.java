@@ -1,4 +1,4 @@
-package pompei.mini3d;
+package pompei.mini3d.probe;
 
 import static pompei.mini3d.ColorUtil.rgbToInt;
 
@@ -9,21 +9,15 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-import pompei.mini3d.mat.Mat4;
-import pompei.mini3d.tri.TriDraw;
+import pompei.mini3d.ColorUtil;
+import pompei.mini3d.Model3D;
+import pompei.mini3d.PointBuffer;
+import pompei.mini3d.tri.TriColorDraw;
 
 public class DrawAfricanHead {
   public static void main(String[] args) throws Exception {
     Model3D m = new Model3D();
     m.loadFromUrl(DrawAfricanHead.class.getResource("african_head.obj"));
-    
-    {
-      Mat4 u = new Mat4().setPngMatrix();
-      double v[] = m.vertices;
-      for (int i = 0, C = m.verticesCount; i < C; i++) {
-        u.mul3(v, 3 * i, v, 3 * i);
-      }
-    }
     
     int width = 600, height = 600;
     
@@ -43,7 +37,7 @@ public class DrawAfricanHead {
     
     pointBuffer.initDeepBuffer();
     
-    TriDraw td = new TriDraw(pointBuffer);
+    TriColorDraw td = new TriColorDraw(pointBuffer);
     
     Random rnd = new SecureRandom();
     

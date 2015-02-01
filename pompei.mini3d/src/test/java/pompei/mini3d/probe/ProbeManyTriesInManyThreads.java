@@ -1,11 +1,12 @@
-package pompei.mini3d;
+package pompei.mini3d.probe;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 
 import javax.imageio.ImageIO;
 
-import pompei.mini3d.tri.TriDraw;
+import pompei.mini3d.PointBuffer;
+import pompei.mini3d.tri.TriColorDraw;
 
 public class ProbeManyTriesInManyThreads {
   
@@ -58,7 +59,7 @@ public class ProbeManyTriesInManyThreads {
       threads[i] = new Thread(new Runnable() {
         @Override
         public void run() {
-          TriDraw td = new TriDraw(pointBuffer);
+          TriColorDraw td = new TriColorDraw(pointBuffer);
           
           for (int k = 0; k < 1000; k++) {
             td.x1 = 0.25;

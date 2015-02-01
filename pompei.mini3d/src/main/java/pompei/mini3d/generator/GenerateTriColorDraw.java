@@ -1,6 +1,6 @@
 package pompei.mini3d.generator;
 
-public class GenerateTriDraw {
+public class GenerateTriColorDraw {
   public static void main(String[] args) throws Exception {
     GenTri gen = new GenTri();
     
@@ -9,7 +9,7 @@ public class GenerateTriDraw {
     gen.textureUV = false;
     
     gen.packageName = "pompei.mini3d.tri";
-    gen.className = "TriDraw";
+    gen.className = "TriColorDraw";
     
     gen.run();
     

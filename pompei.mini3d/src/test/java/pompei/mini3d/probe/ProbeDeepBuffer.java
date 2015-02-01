@@ -1,4 +1,4 @@
-package pompei.mini3d;
+package pompei.mini3d.probe;
 
 import static pompei.mini3d.ColorUtil.rgbToInt;
 
@@ -8,7 +8,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import pompei.mini3d.tri.TriDraw;
+import pompei.mini3d.PointBuffer;
+import pompei.mini3d.tri.TriColorDraw;
 
 public class ProbeDeepBuffer {
   
@@ -71,7 +72,7 @@ public class ProbeDeepBuffer {
     
     pointBuffer.initDeepBuffer();
     
-    TriDraw td = new TriDraw(pointBuffer);
+    TriColorDraw td = new TriColorDraw(pointBuffer);
     
     for (int k = 0; k < 1; k++) {
       td.x1 = 0.125;

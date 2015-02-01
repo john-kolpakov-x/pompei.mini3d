@@ -1,4 +1,4 @@
-package pompei.mini3d;
+package pompei.mini3d.probe;
 
 import static pompei.mini3d.ColorUtil.rgbToInt;
 
@@ -10,8 +10,12 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import pompei.mini3d.ColorUtil;
+import pompei.mini3d.Model3D;
+import pompei.mini3d.PointBuffer;
+import pompei.mini3d.Util;
 import pompei.mini3d.mat.Mat4;
-import pompei.mini3d.tri.TriDraw;
+import pompei.mini3d.tri.TriColorDraw;
 
 public class RotatingAfricanHead {
   
@@ -65,14 +69,6 @@ public class RotatingAfricanHead {
         u.mul3(v, 3 * i, v, 3 * i);
       }
     }
-    if ("a".equals("a1")) {
-      pre = "_U";
-      Mat4 u = new Mat4().setPngMatrix();
-      double v[] = model.vertices;
-      for (int i = 0, C = model.verticesCount; i < C; i++) {
-        u.mul3(v, 3 * i, v, 3 * i);
-      }
-    }
     
     int width = 600, height = 600;
     
@@ -92,7 +88,7 @@ public class RotatingAfricanHead {
     
     pointBuffer.initDeepBuffer();
     
-    TriDraw td = new TriDraw(pointBuffer);
+    TriColorDraw td = new TriColorDraw(pointBuffer);
     
     for (int i = 0; i < model.faceCount; i++) {
       int index1 = model.faces[3 * i + 0];

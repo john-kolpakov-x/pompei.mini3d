@@ -91,30 +91,6 @@ public class Mat4 {
     res[resIdx0 + 3] = r3;
   }
   
-  public Mat4 setPngMatrix() {
-    double[] data = this.data;
-    int i = this.idx0;
-    
-    data[i++] = 0.5; // 0
-    data[i++] = 0; // 1
-    data[i++] = 0; // 2
-    data[i++] = 0.5; // 3
-    data[i++] = 0; // 4
-    data[i++] = -0.5; // 5
-    data[i++] = 0; // 6
-    data[i++] = 0.5; // 7
-    data[i++] = 0; // 8
-    data[i++] = 0; // 9
-    data[i++] = 1; //10
-    data[i++] = 0; //11
-    data[i++] = 0; //12
-    data[i++] = 0; //13
-    data[i++] = 0; //14
-    data[i++] = 1; //15
-    
-    return this;
-  }
-  
   public Mat4 setIdentity() {
     double[] data = this.data;
     int i = this.idx0;
@@ -292,7 +268,7 @@ public class Mat4 {
   }
   
   public Mat4 setRotateZ(double alfa) {
-  
+    
     double[] data = this.data;
     int i = this.idx0;
     
