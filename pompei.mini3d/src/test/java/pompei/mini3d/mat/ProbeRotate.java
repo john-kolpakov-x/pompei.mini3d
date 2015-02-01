@@ -12,4 +12,6 @@ public class ProbeRotate {
     m.mul3(v, 0, v, 0);
     System.out.println("После " + Mat4.vecStr3(v, 0));
   }
+
+  //TODO kill it: For test commit
 }
