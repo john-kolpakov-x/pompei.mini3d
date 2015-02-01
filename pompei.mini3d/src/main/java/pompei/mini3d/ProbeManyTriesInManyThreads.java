@@ -51,7 +51,7 @@ public class ProbeManyTriesInManyThreads {
     pointBuffer.height = height;
     pointBuffer.scansize = scansize;
     
-    pointBuffer.initDeepBuffer(0, +1);
+    pointBuffer.initDeepBuffer();
     
     Thread[] threads = new Thread[8];
     for (int i = 0, C = threads.length; i < C; i++) {

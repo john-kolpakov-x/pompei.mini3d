@@ -249,8 +249,8 @@ public class GenTri {
     methodDrawTri.prn("    ");
     methodDrawTri.prn("    OUT: for (; xi < xB; xi += xStep) {");
     methodDrawTri.prn("      ");
-    methodDrawTri.prn("      if (xi < 0) continue OUT;");
-    methodDrawTri.prn("      if (xi > 1) continue OUT;");
+    methodDrawTri.prn("      if (xi < -1) continue OUT;");
+    methodDrawTri.prn("      if (xi > +1) continue OUT;");
     methodDrawTri.prn("      ");
     methodDrawTri.prn("      double startX = xi - xA;");
     methodDrawTri.prn("      ");
@@ -267,11 +267,11 @@ public class GenTri {
     methodDrawTri.prn("      ");
     methodDrawTri.prn("      IN: for (; yi < yEND; yi += yStep) {");
     methodDrawTri.prn("        ");
-    methodDrawTri.prn("        if (yi < 0) continue IN;");
-    methodDrawTri.prn("        if (yi > 1) continue IN;");
+    methodDrawTri.prn("        if (yi < -1) continue IN;");
+    methodDrawTri.prn("        if (yi > +1) continue IN;");
     methodDrawTri.prn("        ");
-    methodDrawTri.prn("        int X = (int)(xi * width + 0.2);");
-    methodDrawTri.prn("        int Y = (int)(yi * height + 0.2);");
+    methodDrawTri.prn("        int X = (int)((xi + 1)/2 * width + 0.1);");
+    methodDrawTri.prn("        int Y = (int)((1-yi)/2 * height + 0.1);");
     methodDrawTri.prn("        ");
     methodDrawTri.prn("        if (X >= width) continue IN;");
     methodDrawTri.prn("        if (Y >= height) continue IN;");

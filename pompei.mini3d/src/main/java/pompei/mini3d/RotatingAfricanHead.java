@@ -65,7 +65,7 @@ public class RotatingAfricanHead {
         u.mul3(v, 3 * i, v, 3 * i);
       }
     }
-    if ("a".equals("a")) {
+    if ("a".equals("a1")) {
       pre = "_U";
       Mat4 u = new Mat4().setPngMatrix();
       double v[] = model.vertices;
@@ -90,7 +90,7 @@ public class RotatingAfricanHead {
     pointBuffer.height = height;
     pointBuffer.scansize = scansize;
     
-    pointBuffer.initDeepBuffer(-1, +1);
+    pointBuffer.initDeepBuffer();
     
     TriDraw td = new TriDraw(pointBuffer);
     

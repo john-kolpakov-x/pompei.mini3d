@@ -41,7 +41,7 @@ public class DrawAfricanHead {
     pointBuffer.height = height;
     pointBuffer.scansize = scansize;
     
-    pointBuffer.initDeepBuffer(0, +1);
+    pointBuffer.initDeepBuffer();
     
     TriDraw td = new TriDraw(pointBuffer);
     

@@ -292,9 +292,7 @@ public class Mat4 {
   }
   
   public Mat4 setRotateZ(double alfa) {
-    
-    System.out.println("alfa = " + alfa);
-    
+  
     double[] data = this.data;
     int i = this.idx0;
     
