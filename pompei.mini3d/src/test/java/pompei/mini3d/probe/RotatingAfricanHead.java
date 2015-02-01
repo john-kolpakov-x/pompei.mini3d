@@ -53,8 +53,7 @@ public class RotatingAfricanHead {
     }
     
     for (int g = 0; g < 360; g += 5) {
-      Model3D m = model.copy();
-      draw(m, g);
+      draw(model.copy(), g);
     }
     
     System.out.println("OK");
