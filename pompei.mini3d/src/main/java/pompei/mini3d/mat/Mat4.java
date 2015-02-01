@@ -297,27 +297,26 @@ public class Mat4 {
   
   @Override
   public String toString() {
-    int L = 7;
     
     StringBuilder sb = new StringBuilder();
     
-    sb.append('|').append(pa(0, L)).append('|').append(pa(1, L));
-    sb.append('|').append(pa(2, L)).append('|').append(pa(3, L));
+    sb.append('|').append(pa(0)).append('|').append(pa(1));
+    sb.append('|').append(pa(2)).append('|').append(pa(3));
     sb.append("|\n");
-    sb.append('|').append(pa(4, L)).append('|').append(pa(5, L));
-    sb.append('|').append(pa(6, L)).append('|').append(pa(7, L));
+    sb.append('|').append(pa(4)).append('|').append(pa(5));
+    sb.append('|').append(pa(6)).append('|').append(pa(7));
     sb.append("|\n");
-    sb.append('|').append(pa(8, L)).append('|').append(pa(9, L));
-    sb.append('|').append(pa(10, L)).append('|').append(pa(11, L));
+    sb.append('|').append(pa(8)).append('|').append(pa(9));
+    sb.append('|').append(pa(10)).append('|').append(pa(11));
     sb.append("|\n");
-    sb.append('|').append(pa(12, L)).append('|').append(pa(13, L));
-    sb.append('|').append(pa(14, L)).append('|').append(pa(15, L));
+    sb.append('|').append(pa(12)).append('|').append(pa(13));
+    sb.append('|').append(pa(14)).append('|').append(pa(15));
     sb.append("|\n");
     
     return sb.toString();
   }
   
-  private String pa(int i, int len) {
+  private String pa(int i) {
     double v = data[idx0 + i];
     return String.format("% 10.4f ", v);
   }

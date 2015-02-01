@@ -89,6 +89,8 @@ public class RotatingAfricanHead {
     
     TriColorDraw td = new TriColorDraw(pointBuffer);
     
+    long startedAt = System.currentTimeMillis();
+    
     for (int i = 0; i < model.faceCount; i++) {
       int index1 = model.faces[3 * i + 0];
       int index2 = model.faces[3 * i + 1];
@@ -111,6 +113,8 @@ public class RotatingAfricanHead {
       td.draw();
     }
     
+    long time = System.currentTimeMillis() - startedAt;
+    
     {
       BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
       bi.setRGB(0, 0, width, height, rgbArray, 0, scansize);
@@ -120,7 +124,8 @@ public class RotatingAfricanHead {
       }
       String fname = "build/DrawAfricanHead" + pre + "_" + s + ".png";
       ImageIO.write(bi, "png", new File(fname));
-      System.out.println("saved " + fname);
+      System.out.println("Time " + time + "; Saved " + fname);
+      
     }
   }
 }
