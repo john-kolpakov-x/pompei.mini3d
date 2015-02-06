@@ -15,6 +15,7 @@ public class GenTri {
   
   public boolean normals = false;
   public boolean textureUV = false;
+  public boolean texture = false;
   
   public boolean localising = true;
   
@@ -25,6 +26,10 @@ public class GenTri {
   private final Set<String> imp = new HashSet<>();
   
   public void run() throws Exception {
+    
+    if (texture && !textureUV) {
+      throw new RuntimeException("Cannot draw texture without texture UV");
+    }
     
     printMainClass();
     printMethodDraw();
@@ -76,6 +81,11 @@ public class GenTri {
       mainClass.prn("  public double u1, v1;");
       mainClass.prn("  public double u2, v2;");
       mainClass.prn("  public double u3, v3;");
+      mainClass.prn("  ");
+    }
+    if (texture) {
+      mainClass.prn("  public int texture[];");
+      mainClass.prn("  public int textureWidth, textureHeight;");
       mainClass.prn("  ");
     }
     mainClass.prn("  public int color;");
@@ -224,7 +234,7 @@ public class GenTri {
     methodDrawTri.prn("    ");
     methodDrawTri.prn("    int scansize = this.pointBuffer.scansize;");
     methodDrawTri.prn("    int[] screen = this.pointBuffer.screen;");
-    methodDrawTri.prn("    int color = this.color;");
+    //methodDrawTri.prn("    int color = this.color;");
     methodDrawTri.prn("    ");
     methodDrawTri.prn("    double zBack = pointBuffer.zBack;");
     methodDrawTri.prn("    double zFace = pointBuffer.zFace;");
@@ -285,7 +295,7 @@ public class GenTri {
         + "((double)Integer.MIN_VALUE + (zi - zFace) * DEEP_K + 0.5);");
     methodDrawTri.prn("        ");
     methodDrawTri.prn("        //point {xi, yi, zi}");
-    if (normals) {
+    if (normals || texture) {
       methodDrawTri.prn("        ");
       methodDrawTri.prn("        double A12 = " //
           + "((xi-x1)*(x2-x1) + (yi-y1)*(y2-y1) + (zi-z1)*(z2-z1))/V12_2;");
@@ -295,6 +305,8 @@ public class GenTri {
       methodDrawTri.prn("        double a12 = (A12 - A13*Co)/Si2;");
       methodDrawTri.prn("        double a13 = (A13 - A12*Co)/Si2;");
       methodDrawTri.prn("        ");
+    }
+    if (normals) {
       methodDrawTri.prn("        double Nx = nx1 + (nx2-nx1)*a12 + (nx3-nx1)*a13;");
       methodDrawTri.prn("        double Ny = ny1 + (ny2-ny1)*a12 + (ny3-ny1)*a13;");
       methodDrawTri.prn("        double Nz = nz1 + (nz2-nz1)*a12 + (nz3-nz1)*a13;");
@@ -315,6 +327,11 @@ public class GenTri {
       methodDrawTri.prn("        ");
       methodDrawTri.prn("        //texture {u, v}");
     }
+    String colorVar = "color";
+    if (texture) {
+      colorVar = "textureColor";
+      methodDrawTri.prn("        int textureColor = textureColor(u, v);");
+    }
     methodDrawTri.prn("        ");
     methodDrawTri.prn("        int pos = X + Y * scansize;");
     methodDrawTri.prn("        ");
@@ -322,13 +339,83 @@ public class GenTri {
     methodDrawTri.prn("          if (buffer[pos] < deep) continue IN;");
     methodDrawTri.prn("          buffer[pos] = deep;");
     methodDrawTri.prn("          ");
-    methodDrawTri.prn("          screen[pos] = color;");
+    methodDrawTri.prn("          screen[pos] = " + colorVar + ";");
     methodDrawTri.prn("        }");
     methodDrawTri.prn("        ");
     methodDrawTri.prn("      }");
     methodDrawTri.prn("      ");
     methodDrawTri.prn("    }");
     methodDrawTri.prn("  }");
+    
+    if (texture) {
+      methodDrawTri.prn("  private int textureColor(double u, double v) {");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    if (u < -1 || u > +1 || v < -1 || v > +1) {");
+      methodDrawTri.prn("      return color;");
+      methodDrawTri.prn("    }");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    double uu = (u + 1)/2;");
+      methodDrawTri.prn("    double vv = (1 - v)/2;");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    double U = uu * textureWidth ;");
+      methodDrawTri.prn("    double V = vv * textureHeight;");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    int U11 = (int)U;");
+      methodDrawTri.prn("    int V11 = (int)V;");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    int U12 = U11 + 1;");
+      methodDrawTri.prn("    int V12 = V11;");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    int U21 = U11;");
+      methodDrawTri.prn("    int V21 = V11 + 1;");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    int U22 = U11 + 1;");
+      methodDrawTri.prn("    int V22 = V11 + 1;");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    if (U22 >= textureWidth) {");
+      methodDrawTri.prn("      U22 = U12 = U11;");
+      methodDrawTri.prn("    }");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    if (V22 >= textureHeight) {");
+      methodDrawTri.prn("      V22 = V12 = V11;");
+      methodDrawTri.prn("    }");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    int c11 = texture[U11 + V11*textureWidth];");
+      methodDrawTri.prn("    int c12 = texture[U12 + V12*textureWidth];");
+      methodDrawTri.prn("    int c21 = texture[U21 + V21*textureWidth];");
+      methodDrawTri.prn("    int c22 = texture[U22 + V22*textureWidth];");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    int r11 = (c11 & 0xFF0000) >> 16;");
+      methodDrawTri.prn("    int g11 = (c11 &   0xFF00) >>  8;");
+      methodDrawTri.prn("    int b11 = (c11 &     0xFF)      ;");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    int r12 = (c12 & 0xFF0000) >> 16;");
+      methodDrawTri.prn("    int g12 = (c12 &   0xFF00) >>  8;");
+      methodDrawTri.prn("    int b12 = (c12 &     0xFF)      ;");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    int r21 = (c21 & 0xFF0000) >> 16;");
+      methodDrawTri.prn("    int g21 = (c21 &   0xFF00) >>  8;");
+      methodDrawTri.prn("    int b21 = (c21 &     0xFF)      ;");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    int r22 = (c22 & 0xFF0000) >> 16;");
+      methodDrawTri.prn("    int g22 = (c22 &   0xFF00) >>  8;");
+      methodDrawTri.prn("    int b22 = (c22 &     0xFF)      ;");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    " + expr("r"));
+      methodDrawTri.prn("    " + expr("g"));
+      methodDrawTri.prn("    " + expr("b"));
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    return ((r & 0xFF) << (2 * 8)) "
+          + "| ((g & 0xFF) << (1 * 8)) | ((b & 0xFF) << (0 * 8)) | ((0xFF) << (3 * 8));");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("  }");
+    }
+  }
+  
+  private String expr(String k) {
+    String k1 = "(" + k + "11 + (" + k + "12 - " + k + "11)*(U-U11))";
+    String k2 = "(" + k + "21 + (" + k + "22 - " + k + "21)*(U-U11))";
+    return "int " + k + " = (int)(" + k1 + " + (" + k2 + " - " + k1 + ")*(V-V11) + 0.5);";
   }
   
 }
