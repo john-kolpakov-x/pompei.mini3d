@@ -11,10 +11,10 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 
 import pompei.mini3d.ColorUtil;
-import pompei.mini3d.Model3D;
 import pompei.mini3d.PointBuffer;
 import pompei.mini3d.Util;
 import pompei.mini3d.mat.Mat4;
+import pompei.mini3d.model.Model3D;
 import pompei.mini3d.tri.TriColorDraw;
 
 public class RotatingAfricanHead {
