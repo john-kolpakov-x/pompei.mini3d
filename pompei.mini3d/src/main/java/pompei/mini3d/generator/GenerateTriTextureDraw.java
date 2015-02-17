@@ -8,6 +8,7 @@ public class GenerateTriTextureDraw {
     gen.normals = false;
     gen.textureUV = true;
     gen.texture = true;
+    gen.koorTypeUV = KoorTypeUV.TYPE1;
     
     gen.packageName = "pompei.mini3d.tri";
     gen.className = "TriTextureDraw";

@@ -14,7 +14,9 @@ public class GenTri {
   public String className;
   
   public boolean normals = false;
+  
   public boolean textureUV = false;
+  public KoorTypeUV koorTypeUV = KoorTypeUV.TYPE1;
   public boolean texture = false;
   
   public boolean localising = true;
@@ -246,7 +248,7 @@ public class GenTri {
       methodDrawTri.prn("    double Co = " //
           + "((x2-x1)*(x3-x1) + (y2-y1)*(y3-y1) + (z2-z1)*(z3-z1))" //
           + "/" //
-          + "sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1))"//
+          + "sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1))" //
           + "/" //
           + "sqrt((x3-x1)*(x3-x1) + (y3-y1)*(y3-y1) + (z3-z1)*(z3-z1));"//
       );
@@ -349,19 +351,36 @@ public class GenTri {
     
     if (texture) {
       methodDrawTri.prn("  private int textureColor(double u, double v) {");
-      methodDrawTri.prn("    ");
-      methodDrawTri.prn("    if (u < -1 || u > +1 || v < -1 || v > +1) {");
-      methodDrawTri.prn("      return color;");
-      methodDrawTri.prn("    }");
-      methodDrawTri.prn("    ");
-      methodDrawTri.prn("    double uu = (u + 1)/2;");
-      methodDrawTri.prn("    double vv = (1 - v)/2;");
+      switch (koorTypeUV) {
+      case TYPE1:
+        methodDrawTri.prn("    ");
+        methodDrawTri.prn("    if (u < -1 || u > +1 || v < -1 || v > +1) {");
+        methodDrawTri.prn("      return color;");
+        methodDrawTri.prn("    }");
+        methodDrawTri.prn("    ");
+        methodDrawTri.prn("    double uu = (u + 1)/2;");
+        methodDrawTri.prn("    double vv = (1 - v)/2;");
+        break;
+      
+      case TYPE2:
+        methodDrawTri.prn("    ");
+        methodDrawTri.prn("    if (u < 0 || u > +1 || v < 0 || v > +1) {");
+        methodDrawTri.prn("      return color;");
+        methodDrawTri.prn("    }");
+        methodDrawTri.prn("    ");
+        methodDrawTri.prn("    double uu = u;");
+        methodDrawTri.prn("    double vv = 1 - v;");
+        break;
+      }
       methodDrawTri.prn("    ");
       methodDrawTri.prn("    double U = uu * textureWidth ;");
       methodDrawTri.prn("    double V = vv * textureHeight;");
       methodDrawTri.prn("    ");
       methodDrawTri.prn("    int U11 = (int)U;");
       methodDrawTri.prn("    int V11 = (int)V;");
+      methodDrawTri.prn("    ");
+      methodDrawTri.prn("    if (U11 >= textureWidth) return color;");
+      methodDrawTri.prn("    if (V11 >= textureHeight) return color;");
       methodDrawTri.prn("    ");
       methodDrawTri.prn("    int U12 = U11 + 1;");
       methodDrawTri.prn("    int V12 = V11;");
@@ -373,11 +392,11 @@ public class GenTri {
       methodDrawTri.prn("    int V22 = V11 + 1;");
       methodDrawTri.prn("    ");
       methodDrawTri.prn("    if (U22 >= textureWidth) {");
-      methodDrawTri.prn("      U22 = U12 = U11;");
+      methodDrawTri.prn("      U22 = U21 = U12 = U11;");
       methodDrawTri.prn("    }");
       methodDrawTri.prn("    ");
       methodDrawTri.prn("    if (V22 >= textureHeight) {");
-      methodDrawTri.prn("      V22 = V12 = V11;");
+      methodDrawTri.prn("      V22 = V21 = V12 = V11;");
       methodDrawTri.prn("    }");
       methodDrawTri.prn("    ");
       methodDrawTri.prn("    int c11 = texture[U11 + V11*textureWidth];");
